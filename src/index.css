@@ -31,7 +31,9 @@ body {
 .split {
   display: flex;
 }
-
+.title {
+  cursor: pointer;
+}
 .selected-note {
   background-color: #4A4E74;
 }

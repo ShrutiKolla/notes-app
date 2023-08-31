@@ -14,8 +14,8 @@ function App() {
 
   const createNewNote = () => {
     const newNote = {
-      id : nanoid(),
-      body : "# Type your markdown note's title her"
+      id: nanoid(),
+      body: "# Type your markdown note's title her"
     }
     setNotes(prev => ([newNote, ...prev]));
     setCurrNoteId(newNote.id);
@@ -27,6 +27,13 @@ function App() {
     }) || notes[0];
   }
 
+  const updateNote = (text) => {
+    setNotes(prev => (prev.map(note => {
+      return note.id === currNoteId
+        ? { ...note, body: text } :
+        note
+    })))
+  }
   return (
     <main>
       {notes.length !== 0 ?
@@ -38,10 +45,17 @@ function App() {
           <Sidebar
             notes={notes}
             setCurrNoteId={setCurrNoteId}
-            currNote = {findCurrNote()}
-            newNote={createNewNote()}
+            currNote={findCurrNote()}
+            newNote={createNewNote}
           />
-          <Editor />
+          {
+            currNoteId &&
+            notes.length > 0 &&
+            <Editor 
+              updateNote = {updateNote}
+              currNote = {findCurrNote()}
+            />
+          }
         </Split> :
         <div className='no-notes'>
           <h1>You have no notes</h1>
