@@ -9,14 +9,24 @@ import Sidebar from "./Components/Sidebar.jsx";
 
 function App() {
 
-  const [notes, setNotes] = useState([]);
-  console.log(notes);
-  const createNewNote = () => {
+  const [notes, setNotes] = React.useState(
+    JSON.parse(localStorage.getItem("notes")) || []
+  )
+  const [currNoteId, setCurrNoteId] = React.useState(
+    (notes[0] && notes[0].id) || ""
+  )
+
+  React.useEffect(() => {
+    localStorage.setItem("notes", JSON.stringify(notes))
+  }, [notes])
+
+  function createNewNote() {
     const newNote = {
       id: nanoid(),
-      body: '# Type your markdown note\'s title here'
+      body: "# Type your markdown note's title here"
     }
-    setNotes(prev => [newNote, ...prev]);
+    setNotes(prevNotes => [newNote, ...prevNotes])
+    setCurrentNoteId(newNote.id)
   }
   return (
     <main>
@@ -27,7 +37,9 @@ function App() {
           className='split'
         >
           <Sidebar
-            notes={notes} />
+            notes={notes}
+            currNoteId={currNodeId}
+          />
           <Editor />
         </Split> :
         <div className='no-notes'>
@@ -35,7 +47,7 @@ function App() {
           <button
             className='first-note'
             onClick={createNewNote}
-            >Create one Note</button>
+          >Create one Note</button>
         </div>}
     </main>
   )

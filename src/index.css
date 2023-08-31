@@ -31,3 +31,7 @@ body {
 .split {
   display: flex;
 }
+
+.selected-note {
+  background-color: #4A4E74;
+}
