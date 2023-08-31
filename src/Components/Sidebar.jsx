@@ -1,17 +1,14 @@
 import React from 'react';
 
-export default function Sidebar({ notes, currNoteId }) {
-    // console.log(notes);
-
-    const noteElements = notes.map((note, index) => {
-        return (<div key={index}>
-            <div
-                className={`title ${note.id === currNoteId ? "selected-note" : ""
-                    }`}
-            >
-                <h4>Note {index + 1}</h4>
+export default function Sidebar({ notes, currNoteId, currNote }) {
+    const noteElements = notes.map((note, idx) => {
+        return (
+            <div key={note.id}>
+                <div className={`title ${note.id === currNote.id && "selected"}`}>
+                    <div> Note {idx + 1} </div>
+                </div>
             </div>
-        </div>)
+        )
     })
     return (
         <>

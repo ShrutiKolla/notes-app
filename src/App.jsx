@@ -9,25 +9,24 @@ import Sidebar from "./Components/Sidebar.jsx";
 
 function App() {
 
-  const [notes, setNotes] = React.useState(
-    JSON.parse(localStorage.getItem("notes")) || []
-  )
-  const [currNoteId, setCurrNoteId] = React.useState(
-    (notes[0] && notes[0].id) || ""
-  )
+  const [notes, setNotes] = useState([]);
+  const [currNoteId, setCurrNoteId] = useState((notes[0] && notes[0].id) || "");
 
-  React.useEffect(() => {
-    localStorage.setItem("notes", JSON.stringify(notes))
-  }, [notes])
-
-  function createNewNote() {
+  const createNewNote = () => {
     const newNote = {
-      id: nanoid(),
-      body: "# Type your markdown note's title here"
+      id : nanoid(),
+      body : "# Type your markdown note's title her"
     }
-    setNotes(prevNotes => [newNote, ...prevNotes])
-    setCurrentNoteId(newNote.id)
+    setNotes(prev => ([newNote, ...prev]));
+    setCurrNoteId(newNote.id);
   }
+
+  const findCurrNote = () => {
+    return notes.find((note) => {
+      return note.id === currNoteId
+    }) || notes[0];
+  }
+
   return (
     <main>
       {notes.length !== 0 ?
@@ -38,7 +37,9 @@ function App() {
         >
           <Sidebar
             notes={notes}
-            currNoteId={currNodeId}
+            setCurrNoteId={setCurrNoteId}
+            currNote = {findCurrNote()}
+            newNote={createNewNote()}
           />
           <Editor />
         </Split> :
