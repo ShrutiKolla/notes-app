@@ -1,5 +1,5 @@
 import React from "react"
-import ReactMde from "react-mde"
+// import ReactMde from "react-mde"
 import Showdown from "showdown"
 
 export default function Editor({ currNote, updateNote }) {
@@ -14,7 +14,7 @@ export default function Editor({ currNote, updateNote }) {
 
     return (
         <section className="pane editor">
-            <ReactMde
+            {/* <ReactMde
                 value={currNote.body}
                 onChange={updateNote}
                 selectedTab={selectedTab}
@@ -24,7 +24,7 @@ export default function Editor({ currNote, updateNote }) {
                 }
                 minEditorHeight={80}
                 heightUnits="vh"
-            />
+            /> */}
         </section>
     )
 }
