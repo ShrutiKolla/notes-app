@@ -1,7 +1,7 @@
 import React from 'react';
 import Split from "react-split";
 import { nanoid } from "nanoid";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 // components
 import Editor from "./Components/Editor.jsx";
@@ -9,8 +9,12 @@ import Sidebar from "./Components/Sidebar.jsx";
 
 function App() {
 
-  const [notes, setNotes] = useState([]);
+  const [notes, setNotes] = useState(() => JSON.parse(localStorage.getItem("notes")) || "");
   const [currNoteId, setCurrNoteId] = useState((notes[0] && notes[0].id) || "");
+
+  useEffect(() => {
+    localStorage.setItem("notes", JSON.stringify(notes));
+  }, [notes])
 
   const createNewNote = () => {
     const newNote = {
@@ -27,13 +31,46 @@ function App() {
     }) || notes[0];
   }
 
+  // return note.id === currNoteId
+  //   ? { ...note, body: text } :
+  //   note
   const updateNote = (text) => {
-    setNotes(prev => (prev.map(note => {
-      return note.id === currNoteId
-        ? { ...note, body: text } :
-        note
-    })))
+
+    setNotes(prev => {
+
+      let notesArr = [];
+      prev.map(note => {
+        if (note.id === currNoteId) {
+          console.log(note);
+          notesArr = [{...note, body : text}, ...notesArr]
+        } else {
+          notesArr.push(note);
+        }
+      }
+      )
+      return notesArr;
+
+    })
   }
+
+  function deleteNote(event, noteId){
+    event.stopPropagation();
+    // console.log(noteId);
+    // setNotes(prev => {
+    //   return prev.splice(noteId, 1);
+    // })
+    setNotes(prev => {
+      let notesArr = [];
+      for(let i = 0; i < prev.length; i++) {
+        const note = prev[i];
+        if(note.id !== noteId) {
+          notesArr.push(note);
+        }
+      }
+      return notesArr;
+    })
+  }
+
   return (
     <main>
       {notes.length !== 0 ?
@@ -47,13 +84,14 @@ function App() {
             setCurrNoteId={setCurrNoteId}
             currNote={findCurrNote()}
             newNote={createNewNote}
+            deleteNote={deleteNote}
           />
           {
             currNoteId &&
             notes.length > 0 &&
-            <Editor 
-              updateNote = {updateNote}
-              currNote = {findCurrNote()}
+            <Editor
+              updateNote={updateNote}
+              currNote={findCurrNote()}
             />
           }
         </Split> :
