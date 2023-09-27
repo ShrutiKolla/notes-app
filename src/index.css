@@ -8,6 +8,22 @@ body {
   font-family: 'Karla', sans-serif;
 }
 
+.pane {
+  overflow-y: auto;
+}
+button:focus {
+  outline: none;
+}
+
+.title {
+  overflow: hidden;
+  width: 100%;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .no-notes {
   display: flex;
   flex-direction: column;
@@ -37,3 +53,4 @@ body {
 .selected-note {
   background-color: #4A4E74;
 }
+
