@@ -31,9 +31,6 @@ function App() {
     }) || notes[0];
   }
 
-  // return note.id === currNoteId
-  //   ? { ...note, body: text } :
-  //   note
   const updateNote = (text) => {
 
     setNotes(prev => {
