@@ -11,7 +11,7 @@ export default function Sidebar({ notes, setCurrNoteId, currNote, newNote, delet
                     <h4 className='text-snippet'> {note.body.length !== 0 ? note.body.split("\n")[0].substr(0, 15) : `--`} {note.body.length > 15 && " ..."} </h4>
                     <button 
                     className='delete-btn'
-                    onClick={(event) => deleteNote(event, note.id)}
+                    onClick={() => deleteNote(note.id)}
                     >
                         <i className="gg-trash trash-icon"></i>
                     </button>
