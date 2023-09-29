@@ -13,7 +13,9 @@ function App() {
 
   const [notes, setNotes] = useState([]);
   const [currNoteId, setCurrNoteId] = useState("");
+  const [tempNoteText, setTempNoteText] = useState("");
 
+  const sortedNotes = notes.sort((a, b) => b.updatedAt - a.updatedAt);
   const currNote = notes.find(note => note.id === currNoteId) || notes[0];
 
   useEffect(() => {
@@ -33,9 +35,27 @@ function App() {
     }
   }, [notes])
 
+  useEffect(() => {
+    if (currNote) {
+      setTempNoteText(currNote.body)
+    }
+  }, [currNote])
+
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      if (tempNoteText !== currNote.body) {
+        updateNote(tempNoteText);
+      }
+    }, 0)
+    return () => clearTimeout(timeoutId);
+  }
+    , [tempNoteText])
+
   async function createNewNote() {
     const newNote = {
-      body: "# Type your markdown note's title her"
+      body: "# Type your markdown note's title her",
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
     }
     const newNoteRef = await addDoc(notesCollection, newNote);
     setCurrNoteId(newNoteRef.id);
@@ -44,7 +64,7 @@ function App() {
   async function updateNote(text) {
     const docRef = doc(db, "notes", currNoteId);
     console.log(docRef)
-    await setDoc(docRef, { body: text }, { merge: true });
+    await setDoc(docRef, { body: text, updatedAt: Date.now() }, { merge: true });
   }
 
   async function deleteNote(noteId) {
@@ -61,7 +81,7 @@ function App() {
           className='split'
         >
           <Sidebar
-            notes={notes}
+            notes={sortedNotes}
             setCurrNoteId={setCurrNoteId}
             currNote={currNote}
             newNote={createNewNote}
@@ -69,8 +89,10 @@ function App() {
           />
           {
             <Editor
-              updateNote={updateNote}
-              currNote={currNote}
+              tempNoteText={tempNoteText}
+              setTempNoteText={setTempNoteText}
+            // updateNote={updateNote}
+            // currNote={currNote}
             />
           }
         </Split> :
